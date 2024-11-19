@@ -14,6 +14,17 @@
     "categories": {
       "auth": {
         "murt32053b83": {}
+      },
+      "storage": {
+        "MurtDB": {
+          "tableName": "MurtDB",
+          "region": "ap-northeast-2",
+          "arn": "arn:aws:dynamodb:ap-northeast-2:358777512797:table/MurtDB",
+          "partitionKeyName": "PK",
+          "partitionKeyType": "S",
+          "sortKeyName": "SK",
+          "sortKeyType": "S"
+        }
       }
     }
   }

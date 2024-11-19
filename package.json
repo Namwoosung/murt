@@ -15,6 +15,7 @@
     "amazon-cognito-identity-js": "^6.3.14",
     "aws-amplify": "^5.3.26",
     "aws-amplify-react-native": "^7.0.8",
+    "murt": "file:",
     "react": "18.3.1",
     "react-native": "0.76.1"
   },

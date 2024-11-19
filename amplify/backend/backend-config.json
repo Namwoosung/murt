@@ -26,5 +26,71 @@
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
     }
+  },
+  "parameters": {
+    "AMPLIFY_storage_MurtDB_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "MurtDB": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    }
   }
 }
