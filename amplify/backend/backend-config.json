@@ -1,4 +1,24 @@
 {
+  "api": {
+    "murt": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-12-19T06:12:34.381Z",
+              "apiKeyExpirationDays": 30,
+              "description": "API Key Implementing CRUD for DynamoDB"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "murt32053b83": {
       "customAuth": false,
