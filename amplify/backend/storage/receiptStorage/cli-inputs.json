@@ -1,0 +1,17 @@
+{
+  "resourceName": "receiptStorage",
+  "policyUUID": "91a4f7f8",
+  "bucketName": "murtaba19cb938b04e4f8fb4aa465a5ab7ed",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
