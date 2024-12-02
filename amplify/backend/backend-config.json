@@ -1,4 +1,28 @@
 {
+  "api": {
+    "receiptApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "murt32053b83": {
       "customAuth": false,
@@ -25,6 +49,59 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "getReceiptFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "saveReceiptFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_getReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_getReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "receiptStorage": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }

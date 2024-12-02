@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/saveReceipt": {
+      "name": "/saveReceipt",
+      "lambdaFunction": "saveReceiptFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/getReceipt": {
+      "name": "/getReceipt",
+      "lambdaFunction": "getReceiptFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
