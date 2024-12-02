@@ -20,6 +20,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "getReceiptFunction": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "saveReceiptFunction": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

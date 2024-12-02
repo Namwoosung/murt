@@ -9,6 +9,14 @@
           ],
           "category": "function",
           "resourceName": "saveReceiptFunction"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getReceiptFunction"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -44,6 +52,11 @@
     }
   },
   "function": {
+    "getReceiptFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "saveReceiptFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -51,6 +64,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_getReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_getReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_saveReceiptFunction_deploymentBucketName": {
       "usedBy": [
         {
