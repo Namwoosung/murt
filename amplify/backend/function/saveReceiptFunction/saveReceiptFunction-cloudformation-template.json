@@ -15,9 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "storageBucketName": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -72,9 +69,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "STORAGE_BUCKET_NAME": {
-              "Ref": "storageBucketName"
             }
           }
         },
@@ -86,7 +80,7 @@
         },
         "Runtime": "nodejs18.x",
         "Layers": [],
-        "Timeout": 25
+        "Timeout": 120
       }
     },
     "LambdaExecutionRole": {
@@ -95,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "murtLambdaRole8829966a",
+            "murtLambdaRole8ca2e307",
             {
               "Fn::Join": [
                 "",
                 [
-                  "murtLambdaRole8829966a",
+                  "murtLambdaRole8ca2e307",
                   "-",
                   {
                     "Ref": "env"

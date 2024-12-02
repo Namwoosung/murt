@@ -22,8 +22,7 @@
       "function": {
         "saveReceiptFunction": {
           "deploymentBucketName": "amplify-murt-dev-157c9-deployment",
-          "s3Key": "amplify-builds/saveReceiptFunction-2f53307a39786879422b-build.zip",
-          "storageBucketName": "receiptStorage"
+          "s3Key": "amplify-builds/saveReceiptFunction-676a4c4b4b66684e6439-build.zip"
         }
       },
       "api": {

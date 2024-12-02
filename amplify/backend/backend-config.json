@@ -46,7 +46,6 @@
   "function": {
     "saveReceiptFunction": {
       "build": true,
-      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
@@ -61,14 +60,6 @@
       ]
     },
     "AMPLIFY_function_saveReceiptFunction_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "saveReceiptFunction"
-        }
-      ]
-    },
-    "AMPLIFY_function_saveReceiptFunction_storageBucketName": {
       "usedBy": [
         {
           "category": "function",

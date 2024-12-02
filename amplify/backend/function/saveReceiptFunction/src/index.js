@@ -1,40 +1,53 @@
-const AWS = require("aws-sdk");
-const s3 = new AWS.S3();
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
+  let result = "";
+
+  const client = new S3Client({
+    region: "ap-northeast-2",
+  });
+
+  // S3 버킷 이름
+  const bucketName = "murt3d9a0f94a04b417bba57b398662acc4f157c9-dev";
+
   try {
-    const body = JSON.parse(event.body);
-    const base64Image = body.image;
-    const contentType = body.contentType || "image/jpeg";
+    const { base64Image, fileName } = JSON.parse(event.body);
 
+    if (!base64Image || !fileName) {
+      throw new Error("Missing base64Image or fileName in the request");
+    }
+
+    // Base64 디코딩
     const imageBuffer = Buffer.from(base64Image, "base64");
 
-    // S3 업로드
-    const bucketName = process.env.STORAGE_BUCKET_NAME;
-    const fileName = `receipts/${Date.now()}.jpg`;
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: fileName,
+      Body: imageBuffer,
+      ContentType: "image/jpeg",
+    });
 
-    await s3
-      .putObject({
-        Bucket: bucketName,
-        Key: fileName,
-        Body: imageBuffer,
-        ContentType: contentType,
-      })
-      .promise();
+    // S3에 이미지 업로드
+    await client.send(command);
 
-    return {
+    result = {
       statusCode: 200,
       body: JSON.stringify({
         message: "Image uploaded successfully",
-        fileName,
+        fileName: fileName,
       }),
     };
-  } catch (error) {
-    console.error("Error:", error.message);
+  } catch (err) {
+    console.error("Error uploading image to S3:", err);
 
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: error.message }),
+    result = {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Failed to upload image to S3",
+        error: err.message,
+      }),
     };
   }
+
+  return result;
 };
