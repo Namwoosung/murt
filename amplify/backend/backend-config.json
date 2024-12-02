@@ -1,4 +1,20 @@
 {
+  "api": {
+    "receiptApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "murt32053b83": {
       "customAuth": false,
@@ -25,6 +41,40 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "saveReceiptFunction": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_saveReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_storageBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
     }
   },
   "storage": {

@@ -1,0 +1,10 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "storageBucketName",
+      "environmentVariableName": "STORAGE_BUCKET_NAME"
+    }
+  ],
+  "permissions": {}
+}

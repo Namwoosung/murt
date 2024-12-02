@@ -9,11 +9,25 @@
       "UnauthRoleName": "amplify-murt-dev-157c9-unauthRole",
       "StackName": "amplify-murt-dev-157c9",
       "StackId": "arn:aws:cloudformation:ap-northeast-2:358777512797:stack/amplify-murt-dev-157c9/532cc6c0-99d2-11ef-a924-0ab92fd76b1f",
-      "AmplifyAppId": "d3f6yxblidsajw"
+      "AmplifyAppId": "d3f6yxblidsajw",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-murt-dev-157c9-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
         "murt32053b83": {}
+      },
+      "storage": {
+        "receiptStorage": {}
+      },
+      "function": {
+        "saveReceiptFunction": {
+          "deploymentBucketName": "amplify-murt-dev-157c9-deployment",
+          "s3Key": "amplify-builds/saveReceiptFunction-2f53307a39786879422b-build.zip",
+          "storageBucketName": "receiptStorage"
+        }
+      },
+      "api": {
+        "receiptApi": {}
       }
     }
   }
