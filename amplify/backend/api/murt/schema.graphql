@@ -80,36 +80,41 @@ input UpdatePriceInput {
 	price: Float!
 }
 
-type Mutation {
-	# Update mutations
-	updateProductPrice(productId: ID!, input: UpdatePriceInput!): Product
-	updateAccountBookProductPrice(accountBookId: ID!, productId: ID!, input: UpdatePriceInput!): AccountBookProduct
-	updateAccountBook(accountBookId: ID!, input: UpdateAccountBookInput!): AccountBook
-	# Delete mutations
-	deleteAccountBook(accountBookId: ID!): Boolean
-	deleteProductFromAccountBook(accountBookId: ID!, productId: ID!): Boolean
-	# Create mutations
-	createCustomer(input: CreateCustomerInput!): Customer!
-	createAccountBook(input: CreateAccountBookInput!): AccountBook!
-	createProduct(input: CreateProductInput!): Product!
-	createMart(input: CreateMartInput!): Mart!
-	addToWishlist(customerId: ID!, productId: ID!): Boolean!
+type Query {
+  # Customer queries
+  getCustomer(id: ID!): Customer @function(name: "graphqlResolver-${env}")
+  
+  # Product queries
+  getProduct(id: ID!): Product @function(name: "graphqlResolver-${env}")
+  getProductsByName(name: String!): [Product] @function(name: "graphqlResolver-${env}")
+  getProductsByMart(martId: ID!): [Product] @function(name: "graphqlResolver-${env}")
+  getCustomersByWishlistProduct(productId: ID!): [Customer] @function(name: "graphqlResolver-${env}")
+  
+  # Mart queries
+  getMart(id: ID!): Mart @function(name: "graphqlResolver-${env}")
+  
+  # AccountBook queries
+  getAccountBook(id: ID!): AccountBook @function(name: "graphqlResolver-${env}")
+  getAccountBookProducts(accountBookId: ID!): [AccountBookProduct] @function(name: "graphqlResolver-${env}")
+  getProductsInAccountBook(accountBookId: ID!): [Product] @function(name: "graphqlResolver-${env}")
 }
 
-type Query {
-	# Customer queries
-	getCustomer(id: ID!): Customer
-	# Product queries
-	getProduct(id: ID!): Product
-	getProductsByName(name: String!): [Product]
-	getProductsByMart(martId: ID!): [Product]
-	getCustomersByWishlistProduct(productId: ID!): [Customer]
-	# Mart queries
-	getMart(id: ID!): Mart
-	# AccountBook queries
-	getAccountBook(id: ID!): AccountBook
-	getAccountBookProducts(accountBookId: ID!): [AccountBookProduct]
-	getProductsInAccountBook(accountBookId: ID!): [Product]
+type Mutation {
+  # Update mutations
+  updateProductPrice(productId: ID!, input: UpdatePriceInput!): Product @function(name: "graphqlResolver-${env}")
+  updateAccountBookProductPrice(accountBookId: ID!, productId: ID!, input: UpdatePriceInput!): AccountBookProduct @function(name: "graphqlResolver-${env}")
+  updateAccountBook(accountBookId: ID!, input: UpdateAccountBookInput!): AccountBook @function(name: "graphqlResolver-${env}")
+  
+  # Delete mutations
+  deleteAccountBook(accountBookId: ID!): Boolean @function(name: "graphqlResolver-${env}")
+  deleteProductFromAccountBook(accountBookId: ID!, productId: ID!): Boolean @function(name: "graphqlResolver-${env}")
+  
+  # Create mutations
+  createCustomer(input: CreateCustomerInput!): Customer! @function(name: "graphqlResolver-${env}")
+  createAccountBook(input: CreateAccountBookInput!): AccountBook! @function(name: "graphqlResolver-${env}")
+  createProduct(input: CreateProductInput!): Product! @function(name: "graphqlResolver-${env}")
+  createMart(input: CreateMartInput!): Mart! @function(name: "graphqlResolver-${env}")
+  addToWishlist(customerId: ID!, productId: ID!): Boolean! @function(name: "graphqlResolver-${env}")
 }
 
 schema {

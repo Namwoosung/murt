@@ -31,6 +31,10 @@
           "region": "ap-northeast-2",
           "env": "dev",
           "tableName": "MurtDB"
+        },
+        "receiptOcr": {
+          "apiSecretKey": "d2xXSGVlTElyaGV6VGVEcUFIeXh6d09DTWpOVUdaS0s=",
+          "bucketName": "murt3d9a0f94a04b417bba57b398662acc4f157c9-dev"
         }
       }
     }
