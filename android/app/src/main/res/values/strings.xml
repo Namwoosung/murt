@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">murt</string>
+    <string name="kakao_app_key">0db6e4696e3813b5f3e09a8315c38069</string>
 </resources>

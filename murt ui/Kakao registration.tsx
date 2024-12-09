@@ -1,8 +1,15 @@
 //KakaoRegistrationScreen
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, Pressable, ScrollView, StyleSheet } from 'react-native';
 import StatusBar from './StatusBar';
 import KakaoLoginButton from './KakaoLoginButton';
+import {
+  login,
+  logout,
+  getProfile as getKakaoProfile,
+  shippingAddresses as getKakaoShippingAddresses,
+  unlink,
+} from '@react-native-seoul/kakao-login';
 
 const KakaoRegistrationScreen: React.FC = () => {
   return (
@@ -63,3 +70,103 @@ const KakaoLoginButton: React.FC = () => {
 };
 
 export default KakaoLoginButton;
+
+const App = () => {
+  const [result, setResult] = useState('');
+
+  const signInWithKakao = async (): Promise<void> => {
+    const token: KakaoOAuthToken = await login();
+
+    setResult(JSON.stringify(token));
+  };
+
+  const signOutWithKakao = async (): Promise<void> => {
+    const message = await logout();
+
+    setResult(message);
+  };
+
+  const getKakaoProfile = async (): Promise<void> => {
+    const profile: KakaoProfile = await getProfile();
+
+    setResult(JSON.stringify(profile));
+  };
+
+  const getKakaoShippingAddresses = async (): Promise<void> => {
+    const addresses: KakaoShippingAddresses = await shippingAddresses();
+
+    setResult(JSON.stringify(addresses));
+  };
+
+  const getKakaoServiceTerms = async (): Promise<void> => {
+    const serviceTerms: KakaoUserServiceTerms = await serviceTerms();
+
+    setResult(JSON.stringify(serviceTerms))
+  };
+
+  const unlinkKakao = async (): Promise<void> => {
+    const message = await unlink();
+
+    setResult(message);
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.resultContainer}>
+        <ScrollView>
+          <Text>{result}</Text>
+          <View style={{ height: 100 }} />
+        </ScrollView>
+      </View>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          signInWithKakao();
+        }}
+      >
+        <Text style={styles.text}>카카오 로그인</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => getProfile()}>
+        <Text style={styles.text}>프로필 조회</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => getShippingAddresses()}>
+        <Text style={styles.text}>배송주소록 조회</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => unlinkKakao()}>
+        <Text style={styles.text}>링크 해제</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => signOutWithKakao()}>
+        <Text style={styles.text}>카카오 로그아웃</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingBottom: 100,
+  },
+  resultContainer: {
+    flexDirection: "column",
+    width: "100%",
+    padding: 24,
+  },
+  button: {
+    backgroundColor: "#FEE500",
+    borderRadius: 40,
+    borderWidth: 1,
+    width: 250,
+    height: 40,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 10,
+  },
+  text: {
+    textAlign: "center",
+  },
+});
