@@ -1,0 +1,15 @@
+{
+    "typeName": "Mutation",
+    "fieldName": "addToWishlist",
+    "arguments": {
+      "customerId": "123",
+      "productId": "456"
+    },
+    "identity": null,
+    "info": {
+      "fieldName": "addToWishlist",
+      "parentTypeName": "Mutation",
+      "variables": {}
+    }
+  }
+  

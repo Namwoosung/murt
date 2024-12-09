@@ -1,0 +1,17 @@
+{
+    "typeName": "Mutation",
+    "fieldName": "createCustomer",
+    "arguments": {
+      "input": {
+        "nickname": "john",
+        "email": "john@example.com",
+        "password": "hashedpassword123"
+      }
+    },
+    "identity": null,
+    "info": {
+      "fieldName": "createCustomer",
+      "parentTypeName": "Mutation",
+      "variables": {}
+    }
+  }

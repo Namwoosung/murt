@@ -1,45 +1,118 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
-type Customer @model {
-  id: ID!
-  nickname: String!
-  email: String!
-  password: String!
-  accountBooks: [AccountBook] @hasMany
-  wishlist: [Product] @hasMany
+type AccountBook {
+	id: ID!
+	name: String
+	date: AWSDateTime
+	customer: Customer
+	mart: Mart
+	products: [AccountBookProduct]
 }
 
-type Product @model {
-  id: ID!
-  name: String!
-  price: Float!
-  timestamp: AWSDateTime!
-  mart: Mart! @belongsTo
-  inWishlist: [Customer] @hasMany
+type AccountBookProduct {
+	product: Product!
+	price: Float
+	amount: Int
 }
 
-type Mart @model {
-  id: ID!
-  name: String!
-  location: String!
-  products: [Product] @hasMany
+input CreateAccountBookInput {
+	customerId: ID!
+	name: String!
+	date: AWSDateTime!
+	martName: String!
+	martLocation: String!
+	products: [ProductInput!]!
 }
 
-type AccountBook @model {
-  id: ID!
-  name: String!
-  date: AWSDateTime!
-  customer: Customer! @belongsTo
-  mart: Mart! @belongsTo
-  products: [AccountBookProduct] @hasMany
+input CreateCustomerInput {
+	nickname: String!
+	email: String!
+	password: String!
 }
 
-type AccountBookProduct @model {
-  id: ID!
-  accountBook: AccountBook! @belongsTo
-  product: Product! @belongsTo
-  price: Float!
-  amount: Int!
+input CreateMartInput {
+	name: String!
+	location: String!
+}
+
+input CreateProductInput {
+	name: String!
+	price: Float!
+	timestamp: AWSDateTime!
+	martName: String!
+	martLocation: String!
+}
+
+type Customer {
+	id: ID!
+	nickname: String
+	email: String
+	password: String
+	accountBooks: [AccountBook]
+	wishlist: [Product]
+}
+
+type Mart {
+	id: ID!
+	name: String
+	location: String
+	products: [Product]
+}
+
+type Product {
+	id: ID!
+	name: String
+	price: Float
+	timestamp: AWSDateTime
+	mart: Mart
+}
+
+input ProductInput {
+	name: String!
+	price: Float!
+	amount: Int!
+}
+
+input UpdateAccountBookInput {
+	name: String
+	date: AWSDateTime
+}
+
+input UpdatePriceInput {
+	price: Float!
+}
+
+type Mutation {
+	# Update mutations
+	updateProductPrice(productId: ID!, input: UpdatePriceInput!): Product
+	updateAccountBookProductPrice(accountBookId: ID!, productId: ID!, input: UpdatePriceInput!): AccountBookProduct
+	updateAccountBook(accountBookId: ID!, input: UpdateAccountBookInput!): AccountBook
+	# Delete mutations
+	deleteAccountBook(accountBookId: ID!): Boolean
+	deleteProductFromAccountBook(accountBookId: ID!, productId: ID!): Boolean
+	# Create mutations
+	createCustomer(input: CreateCustomerInput!): Customer!
+	createAccountBook(input: CreateAccountBookInput!): AccountBook!
+	createProduct(input: CreateProductInput!): Product!
+	createMart(input: CreateMartInput!): Mart!
+	addToWishlist(customerId: ID!, productId: ID!): Boolean!
+}
+
+type Query {
+	# Customer queries
+	getCustomer(id: ID!): Customer
+	# Product queries
+	getProduct(id: ID!): Product
+	getProductsByName(name: String!): [Product]
+	getProductsByMart(martId: ID!): [Product]
+	getCustomersByWishlistProduct(productId: ID!): [Customer]
+	# Mart queries
+	getMart(id: ID!): Mart
+	# AccountBook queries
+	getAccountBook(id: ID!): AccountBook
+	getAccountBookProducts(accountBookId: ID!): [AccountBookProduct]
+	getProductsInAccountBook(accountBookId: ID!): [Product]
+}
+
+schema {
+	query: Query
+	mutation: Mutation
 }

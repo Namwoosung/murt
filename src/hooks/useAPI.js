@@ -1,443 +1,363 @@
-import { API, graphqlOperation } from 'aws-amplify';
-import { Cache } from 'aws-amplify';
+// src/hooks/useAPI.js
+import { API, graphqlOperation, Cache } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
+import { amplifyConfig } from '../config/amplify';
+import { queries } from '../graphql/queries';
+import { mutations } from '../graphql/mutations';
 
-// Query
-const getCustomer = `
-  query GetCustomer($id: ID!) {
-    getCustomer(id: $id) {
-      id
-      nickname
-      email
-      accountBooks {
-        items {
-          id
-          name
-          date
-        }
-      }
-      wishlist {
-        items {
-          id
-          name
-          price
-        }
-      }
-    }
-  }
-`;
-
-const getProduct = `
-  query GetProduct($id: ID!) {
-    getProduct(id: $id) {
-      id
-      name
-      price
-      timestamp
-      mart {
-        id
-        name
-        location
-      }
-    }
-  }
-`;
-
-const getProductsByName = `
-  query GetProductsByName($name: String!) {
-    getProductsByName(name: $name) {
-      id
-      name
-      price
-      mart {
-        id
-        name
-        location
-      }
-    }
-  }
-`;
-
-const getProductsByMart = `
-  query GetProductsByMart($martId: ID!) {
-    getProductsByMart(martId: $martId) {
-      id
-      name
-      price
-    }
-  }
-`;
-
-const getCustomersByWishlistProduct = `
-  query GetCustomersByWishlistProduct($productId: ID!) {
-    getCustomersByWishlistProduct(productId: $productId) {
-      id
-      nickname
-      email
-    }
-  }
-`;
-
-const getMart = `
-  query GetMart($id: ID!) {
-    getMart(id: $id) {
-      id
-      name
-      location
-      products {
-        items {
-          id
-          name
-          price
-        }
-      }
-    }
-  }
-`;
-
-const getAccountBook = `
-  query GetAccountBook($id: ID!) {
-    getAccountBook(id: $id) {
-      id
-      name
-      date
-      customer {
-        id
-        nickname
-      }
-      products {
-        items {
-          product {
-            id
-            name
-            price
-          }
-          amount
-        }
-      }
-    }
-  }
-`;
-
-// Mutation
-const createCustomer = `
-  mutation CreateCustomer($input: CreateCustomerInput!) {
-    createCustomer(input: $input) {
-      id
-      nickname
-      email
-    }
-  }
-`;
-
-const createAccountBook = `
-  mutation CreateAccountBook($input: CreateAccountBookInput!) {
-    createAccountBook(input: $input) {
-      id
-      name
-      date
-      mart {
-        name
-        location
-      }
-      products {
-        items {
-          product {
-            name
-            price
-          }
-          amount
-        }
-      }
-    }
-  }
-`;
-
-const createProduct = `
-  mutation CreateProduct($input: CreateProductInput!) {
-    createProduct(input: $input) {
-      id
-      name
-      price
-      timestamp
-      mart {
-        name
-        location
-      }
-    }
-  }
-`;
-
-const createMart = `
-  mutation CreateMart($input: CreateMartInput!) {
-    createMart(input: $input) {
-      id
-      name
-      location
-    }
-  }
-`;
-
-const addToWishlist = `
-  mutation AddToWishlist($customerId: ID!, $productId: ID!) {
-    addToWishlist(customerId: $customerId, productId: $productId)
-  }
-`;
-
-const updateProductPrice = `
-  mutation UpdateProductPrice($productId: ID!, $input: UpdatePriceInput!) {
-    updateProductPrice(productId: $productId, input: $input) {
-      id
-      price
-    }
-  }
-`;
-
-const updateAccountBookProductPrice = `
-  mutation UpdateAccountBookProductPrice(
-    $accountBookId: ID!
-    $productId: ID!
-    $input: UpdatePriceInput!
-  ) {
-    updateAccountBookProductPrice(
-      accountBookId: $accountBookId
-      productId: $productId
-      input: $input
-    ) {
-      product {
-        id
-        name
-      }
-      price
-    }
-  }
-`;
-
-const updateAccountBook = `
-  mutation UpdateAccountBook($accountBookId: ID!, $input: UpdateAccountBookInput!) {
-    updateAccountBook(accountBookId: $accountBookId, input: $input) {
-      id
-      name
-      date
-    }
-  }
-`;
-
-const deleteAccountBook = `
-  mutation DeleteAccountBook($accountBookId: ID!) {
-    deleteAccountBook(accountBookId: $accountBookId)
-  }
-`;
-
-const deleteProductFromAccountBook = `
-  mutation DeleteProductFromAccountBook($accountBookId: ID!, $productId: ID!) {
-    deleteProductFromAccountBook(accountBookId: $accountBookId, productId: $productId)
-  }
-`;
+Amplify.configure(amplifyConfig);
 
 export const useAPI = () => {
-  // Query
+  // Query implementations
   const fetchCustomer = async (id) => {
     try {
-      const response = await API.graphql(graphqlOperation(getCustomer, { id }));
-      return response.data.getCustomer;
+      const cachedData = await Cache.getItem(`customer-${id}`);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await API.graphql(
+        graphqlOperation(queries.getCustomer, { id })
+      );
+      
+      if (!response.data.getCustomer) {
+        throw new Error('Customer not found');
+      }
+
+      const customerData = response.data.getCustomer;
+      await Cache.setItem(`customer-${id}`, customerData, { expires: 3600 });
+      return customerData;
     } catch (error) {
       console.error('Error fetching customer:', error);
-      throw error;
+      if (error.message === 'Customer not found') {
+        throw error;
+      }
+      throw new Error('Failed to fetch customer data');
     }
   };
 
   const fetchProduct = async (id) => {
     try {
-      const response = await API.graphql(graphqlOperation(getProduct, { id }));
-      return response.data.getProduct;
+      const cachedData = await Cache.getItem(`product-${id}`);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await API.graphql(
+        graphqlOperation(queries.getProduct, { id })
+      );
+
+      if (!response.data.getProduct) {
+        throw new Error('Product not found');
+      }
+
+      const productData = response.data.getProduct;
+      await Cache.setItem(`product-${id}`, productData, { expires: 3600 });
+      return productData;
     } catch (error) {
       console.error('Error fetching product:', error);
-      throw error;
+      if (error.message === 'Product not found') {
+        throw error;
+      }
+      throw new Error('Failed to fetch product data');
     }
   };
 
   const searchProductsByName = async (name) => {
     try {
-      const response = await API.graphql(graphqlOperation(getProductsByName, { name }));
+      const response = await API.graphql(
+        graphqlOperation(queries.getProductsByName, { name })
+      );
+
+      if (!response.data.getProductsByName) {
+        return [];
+      }
+
       return response.data.getProductsByName;
     } catch (error) {
       console.error('Error searching products:', error);
-      throw error;
+      throw new Error('Failed to search products');
     }
   };
 
   const fetchProductsByMart = async (martId) => {
     try {
-      const response = await API.graphql(graphqlOperation(getProductsByMart, { martId }));
-      return response.data.getProductsByMart;
+      const cachedData = await Cache.getItem(`mart-products-${martId}`);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await API.graphql(
+        graphqlOperation(queries.getProductsByMart, { martId })
+      );
+
+      if (!response.data.getProductsByMart) {
+        return [];
+      }
+
+      const productsData = response.data.getProductsByMart;
+      await Cache.setItem(`mart-products-${martId}`, productsData, { expires: 3600 });
+      return productsData;
     } catch (error) {
       console.error('Error fetching mart products:', error);
-      throw error;
+      throw new Error('Failed to fetch mart products');
     }
   };
 
   const fetchCustomersByWishlistProduct = async (productId) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(getCustomersByWishlistProduct, { productId })
+        graphqlOperation(queries.getCustomersByWishlistProduct, { productId })
       );
+
+      if (!response.data.getCustomersByWishlistProduct) {
+        return [];
+      }
+
       return response.data.getCustomersByWishlistProduct;
     } catch (error) {
       console.error('Error fetching customers by wishlist:', error);
-      throw error;
+      throw new Error('Failed to fetch customers by wishlist');
     }
   };
 
   const fetchMart = async (id) => {
     try {
-      const response = await API.graphql(graphqlOperation(getMart, { id }));
-      return response.data.getMart;
+      const cachedData = await Cache.getItem(`mart-${id}`);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await API.graphql(
+        graphqlOperation(queries.getMart, { id })
+      );
+
+      if (!response.data.getMart) {
+        throw new Error('Mart not found');
+      }
+
+      const martData = response.data.getMart;
+      await Cache.setItem(`mart-${id}`, martData, { expires: 3600 });
+      return martData;
     } catch (error) {
       console.error('Error fetching mart:', error);
-      throw error;
+      if (error.message === 'Mart not found') {
+        throw error;
+      }
+      throw new Error('Failed to fetch mart data');
     }
   };
 
   const fetchAccountBook = async (id) => {
     try {
-      const response = await API.graphql(graphqlOperation(getAccountBook, { id }));
-      return response.data.getAccountBook;
+      const cachedData = await Cache.getItem(`accountbook-${id}`);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      const response = await API.graphql(
+        graphqlOperation(queries.getAccountBook, { id })
+      );
+
+      if (!response.data.getAccountBook) {
+        throw new Error('Account book not found');
+      }
+
+      const accountBookData = response.data.getAccountBook;
+      await Cache.setItem(`accountbook-${id}`, accountBookData, { expires: 3600 });
+      return accountBookData;
     } catch (error) {
       console.error('Error fetching account book:', error);
-      throw error;
+      if (error.message === 'Account book not found') {
+        throw error;
+      }
+      throw new Error('Failed to fetch account book data');
     }
   };
 
-  // Mutation
+  // Mutation implementations
   const createNewCustomer = async (customerData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(createCustomer, { input: customerData })
+        graphqlOperation(mutations.createCustomer, { input: customerData })
       );
+
+      if (!response.data.createCustomer) {
+        throw new Error('Failed to create customer');
+      }
+
       return response.data.createCustomer;
     } catch (error) {
       console.error('Error creating customer:', error);
-      throw error;
+      throw new Error('Failed to create customer');
     }
   };
 
   const createNewAccountBook = async (accountBookData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(createAccountBook, { input: accountBookData })
+        graphqlOperation(mutations.createAccountBook, { input: accountBookData })
       );
+
+      if (!response.data.createAccountBook) {
+        throw new Error('Failed to create account book');
+      }
+
       return response.data.createAccountBook;
     } catch (error) {
       console.error('Error creating account book:', error);
-      throw error;
+      throw new Error('Failed to create account book');
     }
   };
 
   const createNewProduct = async (productData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(createProduct, { input: productData })
+        graphqlOperation(mutations.createProduct, { input: productData })
       );
+
+      if (!response.data.createProduct) {
+        throw new Error('Failed to create product');
+      }
+
       return response.data.createProduct;
     } catch (error) {
       console.error('Error creating product:', error);
-      throw error;
+      throw new Error('Failed to create product');
     }
   };
 
   const createNewMart = async (martData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(createMart, { input: martData })
+        graphqlOperation(mutations.createMart, { input: martData })
       );
+
+      if (!response.data.createMart) {
+        throw new Error('Failed to create mart');
+      }
+
       return response.data.createMart;
     } catch (error) {
       console.error('Error creating mart:', error);
-      throw error;
+      throw new Error('Failed to create mart');
     }
   };
 
   const addProductToWishlist = async (customerId, productId) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(addToWishlist, { customerId, productId })
+        graphqlOperation(mutations.addToWishlist, { customerId, productId })
       );
+
       return response.data.addToWishlist;
     } catch (error) {
       console.error('Error adding to wishlist:', error);
-      throw error;
+      throw new Error('Failed to add product to wishlist');
     }
   };
 
   const updateProductPriceById = async (productId, priceData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(updateProductPrice, { productId, input: priceData })
+        graphqlOperation(mutations.updateProductPrice, { productId, input: priceData })
       );
+
+      if (!response.data.updateProductPrice) {
+        throw new Error('Failed to update product price');
+      }
+
+      // Invalidate cache
+      await Cache.removeItem(`product-${productId}`);
+
       return response.data.updateProductPrice;
     } catch (error) {
       console.error('Error updating product price:', error);
-      throw error;
+      throw new Error('Failed to update product price');
     }
   };
 
   const updateAccountBookProductPriceById = async (accountBookId, productId, priceData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(updateAccountBookProductPrice, {
+        graphqlOperation(mutations.updateAccountBookProductPrice, {
           accountBookId,
           productId,
           input: priceData
         })
       );
+
+      if (!response.data.updateAccountBookProductPrice) {
+        throw new Error('Failed to update account book product price');
+      }
+
+      // Invalidate cache
+      await Cache.removeItem(`accountbook-${accountBookId}`);
+
       return response.data.updateAccountBookProductPrice;
     } catch (error) {
       console.error('Error updating account book product price:', error);
-      throw error;
+      throw new Error('Failed to update account book product price');
     }
   };
 
   const updateAccountBookById = async (accountBookId, accountBookData) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(updateAccountBook, {
+        graphqlOperation(mutations.updateAccountBook, {
           accountBookId,
           input: accountBookData
         })
       );
+
+      if (!response.data.updateAccountBook) {
+        throw new Error('Failed to update account book');
+      }
+
+      // Invalidate cache
+      await Cache.removeItem(`accountbook-${accountBookId}`);
+
       return response.data.updateAccountBook;
     } catch (error) {
       console.error('Error updating account book:', error);
-      throw error;
+      throw new Error('Failed to update account book');
     }
   };
 
   const deleteAccountBookById = async (accountBookId) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(deleteAccountBook, { accountBookId })
+        graphqlOperation(mutations.deleteAccountBook, { accountBookId })
       );
+
+      // Invalidate cache
+      await Cache.removeItem(`accountbook-${accountBookId}`);
+
       return response.data.deleteAccountBook;
     } catch (error) {
       console.error('Error deleting account book:', error);
-      throw error;
+      throw new Error('Failed to delete account book');
     }
   };
 
   const deleteProductFromAccountBookById = async (accountBookId, productId) => {
     try {
       const response = await API.graphql(
-        graphqlOperation(deleteProductFromAccountBook, { accountBookId, productId })
+        graphqlOperation(mutations.deleteProductFromAccountBook, { accountBookId, productId })
       );
+
+      // Invalidate cache
+      await Cache.removeItem(`accountbook-${accountBookId}`);
+
       return response.data.deleteProductFromAccountBook;
     } catch (error) {
       console.error('Error deleting product from account book:', error);
-      throw error;
+      throw new Error('Failed to delete product from account book');
     }
   };
 
   return {
-    // Querie
+    // Queries
     fetchCustomer,
     fetchProduct,
     searchProductsByName,
@@ -446,7 +366,7 @@ export const useAPI = () => {
     fetchMart,
     fetchAccountBook,
 
-    // Mutation
+    // Mutations
     createNewCustomer,
     createNewAccountBook,
     createNewProduct,

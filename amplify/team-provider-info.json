@@ -25,6 +25,13 @@
           "sortKeyName": "SK",
           "sortKeyType": "S"
         }
+      },
+      "function": {
+        "graphqlResolver": {
+          "region": "ap-northeast-2",
+          "env": "dev",
+          "tableName": "MurtDB"
+        }
       }
     }
   }
