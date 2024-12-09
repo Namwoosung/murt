@@ -17,9 +17,27 @@
         "murt32053b83": {}
       },
       "storage": {
+        "MurtDB": {
+          "tableName": "MurtDB",
+          "region": "ap-northeast-2",
+          "arn": "arn:aws:dynamodb:ap-northeast-2:358777512797:table/MurtDB",
+          "partitionKeyName": "PK",
+          "partitionKeyType": "S",
+          "sortKeyName": "SK",
+          "sortKeyType": "S"
+        },
         "receiptStorage": {}
       },
       "function": {
+        "graphqlResolver": {
+          "region": "ap-northeast-2",
+          "env": "dev",
+          "tableName": "MurtDB"
+        },
+        "receiptOcr": {
+          "apiSecretKey": "d2xXSGVlTElyaGV6VGVEcUFIeXh6d09DTWpOVUdaS0s=",
+          "bucketName": "murt3d9a0f94a04b417bba57b398662acc4f157c9-dev"
+        },
         "saveReceiptFunction": {
           "deploymentBucketName": "amplify-murt-dev-157c9-deployment",
           "s3Key": "amplify-builds/saveReceiptFunction-676a4c4b4b66684e6439-build.zip"

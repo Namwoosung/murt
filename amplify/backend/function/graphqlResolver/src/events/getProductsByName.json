@@ -1,0 +1,13 @@
+{
+    "typeName": "Query",
+    "fieldName": "getProductsByName",
+    "arguments": {
+      "name": "Product"
+    },
+    "identity": null,
+    "info": {
+      "fieldName": "getProductsByName",
+      "parentTypeName": "Query",
+      "variables": {}
+    }
+  }

@@ -1,5 +1,23 @@
 {
   "api": {
+    "murt": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-12-19T06:12:34.381Z",
+              "apiKeyExpirationDays": 30,
+              "description": "API Key Implementing CRUD for DynamoDB"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    },
     "receiptApi": {
       "dependsOn": [
         {
@@ -52,6 +70,18 @@
     }
   },
   "function": {
+    "graphqlResolver": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "receiptOcr": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "getReceiptFunction": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -64,6 +94,102 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_graphqlResolver_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "graphqlResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_graphqlResolver_region": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "graphqlResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_graphqlResolver_tableName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "graphqlResolver"
+        }
+      ]
+    },
+    "AMPLIFY_function_receiptOcr_apiSecretKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "receiptOcr"
+        }
+      ]
+    },
+    "AMPLIFY_function_receiptOcr_bucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "receiptOcr"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
+    "AMPLIFY_storage_MurtDB_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "MurtDB"
+        }
+      ]
+    },
     "AMPLIFY_function_getReceiptFunction_deploymentBucketName": {
       "usedBy": [
         {
@@ -98,6 +224,12 @@
     }
   },
   "storage": {
+    "MurtDB": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
     "receiptStorage": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

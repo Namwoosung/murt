@@ -1,0 +1,13 @@
+{
+    "typeName": "Query",
+    "fieldName": "getCustomer",
+    "arguments": {
+      "id": "123"
+    },
+    "identity": null,
+    "info": {
+      "fieldName": "getCustomer",
+      "parentTypeName": "Query",
+      "variables": {}
+    }
+  }

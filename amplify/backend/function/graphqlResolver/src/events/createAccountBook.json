@@ -1,0 +1,31 @@
+{
+    "typeName": "Mutation",
+    "fieldName": "createAccountBook",
+    "arguments": {
+      "input": {
+        "customerId": "123",
+        "name": "Monthly Groceries",
+        "date": "2024-01-01T00:00:00Z",
+        "martName": "Mart A",
+        "martLocation": "Location A",
+        "products": [
+          {
+            "name": "Product 1",
+            "price": 29.99,
+            "amount": 2
+          },
+          {
+            "name": "Product 2",
+            "price": 15.99,
+            "amount": 1
+          }
+        ]
+      }
+    },
+    "identity": null,
+    "info": {
+      "fieldName": "createAccountBook",
+      "parentTypeName": "Mutation",
+      "variables": {}
+    }
+  }
