@@ -2,6 +2,7 @@
 	ENV
 	REGION
 	TABLE_NAME
+  
 Amplify Params - DO NOT EDIT */
 
 /**
