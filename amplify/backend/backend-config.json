@@ -17,6 +17,28 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync"
+    },
+    "receiptApi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -57,6 +79,16 @@
     "receiptOcr": {
       "build": true,
       "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "getReceiptFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "saveReceiptFunction": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
@@ -157,6 +189,38 @@
           "resourceName": "MurtDB"
         }
       ]
+    },
+    "AMPLIFY_function_getReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_getReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveReceiptFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveReceiptFunction"
+        }
+      ]
     }
   },
   "storage": {
@@ -165,6 +229,11 @@
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB",
       "serviceType": "imported"
+    },
+    "receiptStorage": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }

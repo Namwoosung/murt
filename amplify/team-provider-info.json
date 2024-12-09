@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-murt-dev-157c9-unauthRole",
       "StackName": "amplify-murt-dev-157c9",
       "StackId": "arn:aws:cloudformation:ap-northeast-2:358777512797:stack/amplify-murt-dev-157c9/532cc6c0-99d2-11ef-a924-0ab92fd76b1f",
-      "AmplifyAppId": "d3f6yxblidsajw"
+      "AmplifyAppId": "d3f6yxblidsajw",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-murt-dev-157c9-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -24,7 +25,8 @@
           "partitionKeyType": "S",
           "sortKeyName": "SK",
           "sortKeyType": "S"
-        }
+        },
+        "receiptStorage": {}
       },
       "function": {
         "graphqlResolver": {
@@ -35,7 +37,18 @@
         "receiptOcr": {
           "apiSecretKey": "d2xXSGVlTElyaGV6VGVEcUFIeXh6d09DTWpOVUdaS0s=",
           "bucketName": "murt3d9a0f94a04b417bba57b398662acc4f157c9-dev"
+        },
+        "saveReceiptFunction": {
+          "deploymentBucketName": "amplify-murt-dev-157c9-deployment",
+          "s3Key": "amplify-builds/saveReceiptFunction-676a4c4b4b66684e6439-build.zip"
+        },
+        "getReceiptFunction": {
+          "deploymentBucketName": "amplify-murt-dev-157c9-deployment",
+          "s3Key": "amplify-builds/getReceiptFunction-586e66704f5874727859-build.zip"
         }
+      },
+      "api": {
+        "receiptApi": {}
       }
     }
   }
